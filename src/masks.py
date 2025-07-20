@@ -3,17 +3,16 @@ def get_mask_card_number(card_number: int) -> str:
     Формат маски: XXXX XX** **** XXXX"""
 
     card_str = str(card_number)
+    if not card_str:
+        raise ValueError("Номер карты должен содержать 16 цифр")
 
-    # проверка номера карты на количество цифр
+    if not card_str.isdigit():
+        raise ValueError("В номере карты должны содержаться только цифры")
 
     if len(card_str) != 16:
-        raise ValueError("Номер карты должен содержать  16 цифр")
+        raise ValueError("Номер карты должен содержать 16 цифр")
 
-    # в f-строку пишем номер карты в формате маски
-
-    mask_format_for_card = f"{card_str[0:4]} {card_str[4:6]}** **** {card_str[12:16]}"
-
-    return mask_format_for_card
+    return f"{card_str[:4]} {card_str[4:6]}** **** {card_str[12:]}"
 
 
 if __name__ == "__main__":
