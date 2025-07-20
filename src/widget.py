@@ -1,3 +1,5 @@
+import datetime
+
 def mask_account_card(card_number_account: str) -> str:
     """Маскирует номер карты/счета оставляя с 7й по 12ю
      цифры  невидимыми для карты и оставляя последние
@@ -44,14 +46,20 @@ if __name__ == "__main__":
 def get_date(get_data: str) -> str:
     """"Функция принимает строку и выдает дату в формате ДД.ММ.ГГГГ"""
 
+
     # разделяем по границе буквы T и берем первую часть цифр с датой
     data_info1 = get_data.split("T")[0]
 
-    # делим цифры по знаку "-" на день, месяц и год
-    year, month, day = data_info1.split("-")
+    if "-" in data_info1:
+        # делим цифры по знаку "-" на день, месяц и год
+        year, month, day = data_info1.split("-")
+    else:
+        return "Нарушен формат даты, введите корректное значение, разделяя через '-' ГГГГ-ММ-ДД"
+
+
 
     return f"{day}.{month}.{year}"
 
 
 if __name__ == "__main__":
-    print(get_date("2024-03-11T02:26:18.671407"))
+    print(get_date(""))
