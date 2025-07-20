@@ -13,6 +13,12 @@ def mask_account_card(card_number_account: str) -> str:
     name_card = " ".join(sep_card_str[:-1])
     # цифры номера карты/счета записываем в отдельную переменную
     number_card_account = sep_card_str[-1]
+    if number_card_account.isdigit():
+        pass
+    else:
+        return "Номер счета/карты должен содержать только цифры"
+
+
 
     # Вывод маски карты/счета + проверка на количество цифр
     if len(number_card_account) == 16:
@@ -32,7 +38,7 @@ def mask_account_card(card_number_account: str) -> str:
 
 
 if __name__ == "__main__":
-    print(mask_account_card('Счет 1234123412341234151515'))
+    print(mask_account_card('Счет 12341234123412341234'))
 
 
 def get_date(get_data: str) -> str:
