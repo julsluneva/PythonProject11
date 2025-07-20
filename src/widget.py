@@ -16,9 +16,15 @@ def mask_account_card(card_number_account: str) -> str:
 
     # Вывод маски карты/счета + проверка на количество цифр
     if len(number_card_account) == 16:
-        mask_format_for_card_account = f"{name_card} {number_card_account[4:6]}** **** {number_card_account[12:16]}"
+        if name_card == 'Счет' or name_card == 'счет':
+            mask_format_for_card_account = f"Счет содержит больше 16 цифр"
+        else:
+            mask_format_for_card_account = f"{name_card} {number_card_account[4:6]}** **** {number_card_account[12:16]}"
     elif len(number_card_account) == 20:
-        mask_format_for_card_account = f"{name_card} **{number_card_account[-4:]}"
+        if name_card == 'Счет' or name_card == 'счет':
+            mask_format_for_card_account = f"{name_card} **{number_card_account[-4:]}"
+        else:
+            mask_format_for_card_account = f"Номер карты содержит 16 цифр"
     else:
         mask_format_for_card_account = "Номер карты/счета должен содержать 16 или 20 цифр"
 
@@ -26,7 +32,7 @@ def mask_account_card(card_number_account: str) -> str:
 
 
 if __name__ == "__main__":
-    print(mask_account_card('Счет 123412341234123412'))
+    print(mask_account_card('Счет 1234123412341234151515'))
 
 
 def get_date(get_data: str) -> str:
