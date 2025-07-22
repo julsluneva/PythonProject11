@@ -38,7 +38,7 @@ def mask_account_card(card_number_account: str) -> str:
 
 
 if __name__ == "__main__":
-    print(mask_account_card("Счет 12341234123412341234"))
+    print(mask_account_card("Visa Platinum 1234 56** **** 3456"))
 
 
 def get_date(get_data: str) -> str:
