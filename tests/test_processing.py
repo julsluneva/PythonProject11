@@ -27,7 +27,7 @@ def sample_data():
 def test_filter_by_state(sample_data, state, expected_ids):
     """Тестирование фильтрации операций по состоянию"""
     filtered = filter_by_state(sample_data, state)
-    assert [х["id"] for х in filtered] == expected_ids
+    assert [x["id"] for x in filtered] == expected_ids
 
 
 def test_filter_by_state_default(sample_data):
