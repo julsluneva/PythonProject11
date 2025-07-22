@@ -1,13 +1,13 @@
-def get_mask_card_number(card_number: int) -> str:
-    """Маскирует номер карты, оставляя с 7й по 12ю цифры  невидимыми.
+def get_mask_card_number(card_number: str | int) -> str:
+    """Маскирует номер карты, оставляя с 7й по 12ю цифры невидимыми.
     Формат маски: XXXX XX** **** XXXX"""
 
-    card_str = str(card_number)
-    if not card_str:
-        raise ValueError("Номер карты должен содержать 16 цифр")
-
-    if not card_str.isdigit():
-        raise ValueError("В номере карты должны содержаться только цифры")
+    if isinstance(card_number, str):
+        if not card_number.isdigit():
+            raise ValueError("Номер карты должен содержать только цифры")
+        card_str = card_number
+    else:
+        card_str = str(card_number)
 
     if len(card_str) != 16:
         raise ValueError("Номер карты должен содержать 16 цифр")
@@ -16,13 +16,18 @@ def get_mask_card_number(card_number: int) -> str:
 
 
 if __name__ == "__main__":
-    print(get_mask_card_number("1234abcd5678efgh"))
+    print(get_mask_card_number(""))
 
 
-def get_mask_account(account_number: int) -> str:
+def get_mask_account(account_number: str | int) -> str:
     """ " Маскирует номер счета, делая видимыми последние 4 цифры"""
 
-    account_code = str(account_number)
+    if isinstance(account_number, str):
+        if not account_number.isdigit():
+            raise ValueError("Номер счета должен содержать только цифры")
+        account_code = account_number
+    else:
+        account_code = str(account_number)
 
     # проверка номера счета на количество цифр
     if len(account_code) < 6:
@@ -36,4 +41,4 @@ def get_mask_account(account_number: int) -> str:
 
 
 if __name__ == "__main__":
-    print(get_mask_account(1222))
+    print(get_mask_account(12341234))

@@ -1,6 +1,9 @@
+from typing import Any
+
 import pytest
-from typing import Tuple, List, Dict, Any
-from src.masks import get_mask_card_number, get_mask_account
+
+from src.masks import get_mask_account, get_mask_card_number
+
 
 # Фикстуры для тестов
 @pytest.fixture
@@ -32,9 +35,8 @@ def test_get_mask_card_number_valid(card_number: int, expected: str):
     [
         (123456781234567, ValueError),  # Недостаточно цифр
         (12345678123456789, ValueError),  # Слишком много цифр
-        ("1234567812345678", ValueError),  # Строка вместо числа
         ("1234abcd5678efgh", ValueError),  # Не цифровые символы
-        ("", ValueError)                  # Пустая строка
+        ("", ValueError),  # Пустая строка
     ],
 )
 def test_get_mask_card_number_invalid(invalid_card_number: Any, expected_exception: Any):
@@ -62,9 +64,8 @@ def test_get_mask_account_valid(account_number: int, expected: str):
     "invalid_account_number, expected_exception",
     [
         (12345, ValueError),  # Недостаточно цифр
-        ("1234567890", ValueError),  # Строка вместо числа
         ("abcdefghij", ValueError),  # Не цифровые символы
-        ("", ValueError), # Пустая строка
+        ("", ValueError),  # Пустая строка
     ],
 )
 def test_get_mask_account_invalid(invalid_account_number: Any, expected_exception: Any):
