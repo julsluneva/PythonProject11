@@ -178,6 +178,6 @@ pytest
 
 Требования: 
 Python 3.7+
-
+ 
 pytest
 
