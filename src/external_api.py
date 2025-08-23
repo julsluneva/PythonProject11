@@ -47,7 +47,7 @@ def convert_currency(transaction_data: Dict[str, Any]) -> float:
     try:
         # Извлекаем данные из транзакции
         amount_str = transaction_data['operationAmount']['amount']
-        currency_code = trasaction_data['operationAmount']['currency']['code']
+        currency_code = transaction_data['operationAmount']['currency']['code']
         amount = float(amount_str)
 
         # Если валюта уже в рублях, то возвращаем, как есть

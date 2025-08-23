@@ -22,4 +22,3 @@ def read_operations_json() -> List[Dict[Any, Any]]:
         return []
     except Exception:
         return []
-
