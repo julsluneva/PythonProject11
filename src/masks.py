@@ -11,20 +11,18 @@ logger.setLevel(logging.DEBUG)
 
 # Создание file handler для логера
 log_file_path = logs_dir / "masks.log"
-file_handler = logging.FileHandler(log_file_path, mode='w', encoding='utf-8')
+file_handler = logging.FileHandler(log_file_path, mode="w", encoding="utf-8")
 file_handler.setLevel(logging.DEBUG)
 
 # Создание file formatter
-file_formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H-%M-%S'
-)
+file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H-%M-%S")
 
 # Установка форматтера для file_handler и добавление handler к логеру
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 print(f"Логи будут записываться в: {log_file_path.absolute()}")
+
 
 def get_mask_card_number(card_number: str | int) -> str:
     """Маскирует номер карты, оставляя с 7й по 12ю цифры невидимыми.
@@ -45,11 +43,11 @@ def get_mask_card_number(card_number: str | int) -> str:
             logger.error(error_message)
             raise ValueError(error_message)
 
-        masked_number =  f"{card_str[:4]} {card_str[4:6]}** **** {card_str[12:]}"
-        logger.info(f'Успешное маскирование номера карты: {masked_number}')
+        masked_number = f"{card_str[:4]} {card_str[4:6]}** **** {card_str[12:]}"
+        logger.info(f"Успешное маскирование номера карты: {masked_number}")
         return masked_number
     except Exception as e:
-        logger.exception(f'Ошибка при маскировании номера карты: {e}')
+        logger.exception(f"Ошибка при маскировании номера карты: {e}")
         raise
 
 
@@ -75,10 +73,10 @@ def get_mask_account(account_number: str | int) -> str:
         # пишем f-строку в формате маски
 
         mask_format_for_account = f"**{account_code[-4:]}"
-        logger.info(f'Успешное маскирование номера счета: {mask_format_for_account}')
+        logger.info(f"Успешное маскирование номера счета: {mask_format_for_account}")
         return mask_format_for_account
     except Exception as e:
-        logger.exception(f'Ошибка при маскировании счета: {e}')
+        logger.exception(f"Ошибка при маскировании счета: {e}")
         raise
 
 
@@ -95,5 +93,4 @@ if __name__ == "__main__":
             print("Файл логов не создан!")
 
     except Exception as e:
-        logger.exception(f'Произошла ошибка: {e}')
-
+        logger.exception(f"Произошла ошибка: {e}")
