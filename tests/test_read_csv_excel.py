@@ -36,7 +36,7 @@ def test_load_transactions_from_csv_success(mock_read_csv):
             {'id': 2, 'amount': 200}
         ]
         # Проверяем, что print вызвана с правильным сообщением
-        mock_print.assert_called_once_with("Успешно загружено 2 транзакции из CSV")
+        mock_print.assert_called_once_with(" Успешно загружено 2 транзакций из CSV")
 
 
 # Тест для проверки ошибки 'файл не найден'
@@ -96,7 +96,7 @@ def test_load_transactions_from_excel_success(mock_read_excel):
         {'id': 2, 'amount': 250},
         {'id': 3, 'amount': 350}
     ]
-    mock_print.assert_called_once_with('Успешно загружено 3 транзакции из Excel')
+    mock_print.assert_called_once_with('Успешно загружено 3 транзакций из Excel')
 
 @patch('read_csv_excel.pd.read_excel')
 def test_load_transactions_from_excel_file_not_found(mock_read_excel):
@@ -128,7 +128,7 @@ def test_load_transactions_from_csv_empty_file(mock_read_csv):
     mock_read_csv.assert_called_once_with(file_path)
     mock_df.to_dict.assert_called_once_with('records')
     assert result == [] # Должен вернуть пустой список
-    mock_print.assert_called_once_with('Успешно загружено 0 транзакций из CSV')
+    mock_print.assert_called_once_with(' Успешно загружено 0 транзакций из CSV')
 
 def test_path_correct():
     """Тест корректности расчета путей"""
