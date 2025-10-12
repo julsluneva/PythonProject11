@@ -20,6 +20,10 @@ card_number_generator() - функция-генератор, которая ге
 
 log() - декоратор, который логирует вызовы функций, фиксирует успешные выполнения и ошибки
 
+load_transactions_from_csv() - функция загружает список из файла в формате CSV и выдает список словарей с транзакциями
+
+load_transactions_from_excel()- функция загружает список из файла в формате Excel и выдает список словарей с транзакциями
+
 Функция mask_account_card Маскирует номер карты или счета, оставляя только часть цифр видимыми.
 
 Форматы маскировки: Для карт (16 цифр): XXXX XX** **** XXXX
@@ -144,9 +148,16 @@ divide(10, 2) # Выведет в консоль: 2023-01-01 12:00:00 - divide o
 
 multiply(3, 4) # Запишет в файл operations.log: 2023-01-01 12:00:00 - multiply ok
 
+функции load_transactions_from_csv() и load_transactions_from_excel() реализуют чтение транзакций из соответствующих 
+файлов с преобразованием их в список словарей. Реализованы информационные сообщения о процессе загрузки и ошибках. Модуль
+включает комплексные тесты для проверки функциональности(успешная загрузка, обработка ошибок, граничные случаи, 
+специфические исключения, проверка типов, интеграционные тесты)
+
 Импортируйте нужные функции:
 
-from src.masks import mask_account_card, get_date, get_mask_card_number, get_mask_account from src.generators filter_by_currency, transaciton_descriptions, card_number_generator from src.processing filter_by_state, sort_by_date from src.decorators log
+from src.masks import mask_account_card, get_date, get_mask_card_number, get_mask_account from src.generators filter_by_currency,
+transaciton_descriptions, card_number_generator from src.processing filter_by_state, sort_by_date from src.decorators log
+load_transactions_from_csv, load_transactions_from_excel
 
 Тестирование Проект включает набор тестов с использованием pytest. Тесты проверяют:
 
