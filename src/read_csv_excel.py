@@ -1,6 +1,5 @@
 import os
 from typing import Any, Dict, List
-
 import pandas as pd
 
 
@@ -11,7 +10,7 @@ def load_transactions_from_csv(file_path: str) -> List[Dict[str, Any]]:
         df = pd.read_csv(file_path)
         transactions = df.to_dict("records")
         print(f" Успешно загружено {len(transactions)} транзакций из CSV")
-        return transactions
+        return transactions  # type: ignore
     except FileNotFoundError:
         print(f"Ошибка: Файл {file_path} не найден")
         return []
@@ -21,13 +20,13 @@ def load_transactions_from_csv(file_path: str) -> List[Dict[str, Any]]:
 
 
 def load_transactions_from_excel(file_path: str) -> List[Dict[str, Any]]:
-    """Закгружает список из файла ф вормате Excel и выдает транзакции в виде списка словарей"""
+    """Загружает список из файла в формате Excel и выдает список словарей с транзакциями"""
 
     try:
         df = pd.read_excel(file_path)
         transactions = df.to_dict("records")
         print(f"Успешно загружено {len(transactions)} транзакций из Excel")
-        return transactions
+        return transactions  # type: ignore
     except FileNotFoundError:
         print(f"Ошибка: Файл {file_path} не найден")
         return []

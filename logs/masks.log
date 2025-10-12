@@ -1,2 +1,51 @@
-2025-08-29 16-16-17 - __main__ - INFO - Успешное маскирование номера карты: 1234 56** **** 3456
-2025-08-29 16-16-17 - __main__ - INFO - Успешное маскирование номера счета: **1234
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера карты: 1234 56** **** 5678
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера карты: 1111 22** **** 4444
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера карты: 9999 88** **** 6666
+2025-10-12 22-07-00 - src.masks - ERROR - Номер карты должен содержать 16 цифр
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании номера карты: Номер карты должен содержать 16 цифр
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 44, in get_mask_card_number
+    raise ValueError(error_message)
+ValueError: Номер карты должен содержать 16 цифр
+2025-10-12 22-07-00 - src.masks - ERROR - Номер карты должен содержать 16 цифр
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании номера карты: Номер карты должен содержать 16 цифр
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 44, in get_mask_card_number
+    raise ValueError(error_message)
+ValueError: Номер карты должен содержать 16 цифр
+2025-10-12 22-07-00 - src.masks - ERROR - Номер карты должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании номера карты: Номер карты должен содержать только цифры
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 36, in get_mask_card_number
+    raise ValueError(error_message)
+ValueError: Номер карты должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - ERROR - Номер карты должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании номера карты: Номер карты должен содержать только цифры
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 36, in get_mask_card_number
+    raise ValueError(error_message)
+ValueError: Номер карты должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера счета: **7890
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера счета: **3210
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера счета: **0001
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера счета: **3456
+2025-10-12 22-07-00 - src.masks - ERROR - Номер счета должен быть не менее 6 цифр
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании счета: Номер счета должен быть не менее 6 цифр
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 71, in get_mask_account
+    raise ValueError(error_message)
+ValueError: Номер счета должен быть не менее 6 цифр
+2025-10-12 22-07-00 - src.masks - ERROR - Номер счета должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании счета: Номер счета должен содержать только цифры
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 62, in get_mask_account
+    raise ValueError(error_message)
+ValueError: Номер счета должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - ERROR - Номер счета должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - ERROR - Ошибка при маскировании счета: Номер счета должен содержать только цифры
+Traceback (most recent call last):
+  File "C:\Users\julsl\PycharmProjects\PythonProject11\src\masks.py", line 62, in get_mask_account
+    raise ValueError(error_message)
+ValueError: Номер счета должен содержать только цифры
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера карты: 1234 56** **** 5678
+2025-10-12 22-07-00 - src.masks - INFO - Успешное маскирование номера счета: **7890
