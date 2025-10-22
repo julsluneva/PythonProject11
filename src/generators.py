@@ -83,6 +83,7 @@ def transaction_descriptions(transactions):
             raise KeyError("description key not found in transaction")
         yield trans["description"]
 
+
 def card_number_generator(start, end):
     """Функция-генератор, которая выдает номера в формате маски XXXX XXXX XXXX XXXX. Геренатор
     принимает начальное и конечное значения для генерации диапазона номеров"""
@@ -91,10 +92,13 @@ def card_number_generator(start, end):
     if start > end or start < 0 or end > 9:
         raise ValueError("start and end must be between 0 and 9")
     import random
+
     random.seed(42)  # Фиксированный seed для воспроизводимости
     while True:
         digits = [str(random.randint(start, end)) for _ in range(16)]
-        yield (f"{''.join(digits[:4])}"
-               f" {''.join(digits[4:8])} "
-               f"{''.join(digits[8:12])}"
-               f" {''.join(digits[12:16])}")
+        yield (
+            f"{''.join(digits[:4])}"
+            f" {''.join(digits[4:8])} "
+            f"{''.join(digits[8:12])}"
+            f" {''.join(digits[12:16])}"
+        )
