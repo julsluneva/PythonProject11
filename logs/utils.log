@@ -1,0 +1,6 @@
+ 2025-08-29 15-46-57 - __main__ - DEBUG - тест DEBUG
+ 2025-08-29 15-46-57 - __main__ - INFO - тест INFO
+ 2025-08-29 15-46-57 - __main__ - WARNING - тест WARNING
+ 2025-08-29 15-46-57 - __main__ - ERROR - тест ERROR
+ 2025-08-29 15-46-57 - __main__ - DEBUG - Попытка чтения файла: C:\Users\julsl\PycharmProjects\PythonProject11\data\operations.json
+ 2025-08-29 15-46-57 - __main__ - DEBUG - Файл успешно прочитан: C:\Users\julsl\PycharmProjects\PythonProject11\data\operations.json
