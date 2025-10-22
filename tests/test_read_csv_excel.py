@@ -6,7 +6,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
-from read_csv_excel import load_transactions_from_csv, load_transactions_from_excel
+from src.read_csv_excel import load_transactions_from_csv, load_transactions_from_excel
 
 
 @patch("read_csv_excel.pd.read_csv")
@@ -19,7 +19,7 @@ def test_load_transactions_from_csv_success(mock_read_csv):
         mock_read_csv.return_value = mock_df
         file_path = "test.csv"
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             # вызываем тестируемую функцию с тестовым путем
             result = load_transactions_from_csv(file_path)
         # Проверяем, что pd.read_csv был вызван 1 раз с правильным путем
@@ -41,7 +41,7 @@ def test_load_transactions_from_csv_file_not_found(mock_read_csv):
     mock_read_csv.side_effect = FileNotFoundError("File not found")
 
     file_path = "nonexistent.csv"
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
         # Проверяем, что read_csv был вызван с правильным путем
         mock_read_csv.assert_called_once_with(file_path)
@@ -58,7 +58,7 @@ def test_load_transactions_from_csv_general_error(mock_read_csv):
     mock_read_csv.side_effect = Exception("Some error")
     file_path = "corrupted.csv"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
     mock_read_csv.assert_called_once_with(file_path)
@@ -77,7 +77,7 @@ def test_load_transactions_from_excel_success(mock_read_excel):
         mock_read_excel.return_value = mock_df
         file_path = "test.xlsx"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_excel(file_path)
 
     mock_read_excel.assert_called_once_with(file_path)
@@ -93,7 +93,7 @@ def test_load_transactions_from_excel_file_not_found(mock_read_excel):
     mock_read_excel.side_effect = FileNotFoundError("Excel file not found")
     file_path = "nonexistent.xlsx"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_excel(file_path)
 
     mock_read_excel.assert_called_once_with(file_path)
@@ -111,7 +111,7 @@ def test_load_transactions_from_csv_empty_file(mock_read_csv):
         mock_read_csv.return_value = mock_df
         file_path = "empty.csv"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
     mock_read_csv.assert_called_once_with(file_path)
@@ -145,7 +145,7 @@ def test_load_transactions_from_excel_general_error(mock_read_excel):
     mock_read_excel.side_effect = Exception("Excel read error")
     file_path = "corrupted.xlsx"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_excel(file_path)
 
     mock_read_excel.assert_called_once_with(file_path)
@@ -162,7 +162,7 @@ def test_load_transactions_from_excel_empty_file(mock_read_excel):
         mock_read_excel.return_value = mock_df
         file_path = "empty.xlsx"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_excel(file_path)
 
     mock_read_excel.assert_called_once_with(file_path)
@@ -183,7 +183,7 @@ def test_load_transactions_from_csv_specific_exception(mock_read_csv):
         mock_read_csv.side_effect = exception
         file_path = "test.csv"
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
         assert result == []
@@ -203,7 +203,7 @@ def test_load_transactions_from_excel_specific_exception(mock_read_excel):
         mock_read_excel.side_effect = exception
         file_path = "test.xlsx"
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             result = load_transactions_from_excel(file_path)
 
         assert result == []
@@ -255,7 +255,7 @@ def test_load_transactions_from_csv_single_transaction(mock_read_csv):
         mock_read_csv.return_value = mock_df
         file_path = "single.csv"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
     mock_read_csv.assert_called_once_with(file_path)
@@ -273,7 +273,7 @@ def test_load_transactions_from_excel_single_transaction(mock_read_excel):
         mock_read_excel.return_value = mock_df
         file_path = "single.xlsx"
 
-    with patch("read_csv_excel.print") as mock_print:
+    with patch("builtins.print") as mock_print:
         result = load_transactions_from_excel(file_path)
 
     mock_read_excel.assert_called_once_with(file_path)
@@ -303,7 +303,7 @@ def test_load_transactions_from_csv_with_none_dataframe():
         mock_read_csv.return_value = None
         file_path = "test.csv"
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
         assert result == []
@@ -316,7 +316,7 @@ def test_load_transactions_from_excel_with_none_dataframe():
         mock_read_excel.return_value = None
         file_path = "test.xlsx"
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             result = load_transactions_from_excel(file_path)
 
         assert result == []
@@ -348,7 +348,7 @@ def test_transactions_from_csv_empty_string_file_path():
         mock_read_csv.side_effect = FileNotFoundError()
         file_path = ""
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
         assert result == []
@@ -361,7 +361,7 @@ def test_transactions_from_excel_empty_string_file_path():
         mock_read_excel.side_effect = FileNotFoundError()
         file_path = ""
 
-        with patch("read_csv_excel.print") as mock_print:
+        with patch("builtins.print") as mock_print:
             result = load_transactions_from_excel(file_path)
 
         assert result == []

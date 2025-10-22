@@ -155,8 +155,10 @@ multiply(3, 4) # Запишет в файл operations.log: 2023-01-01 12:00:00 
 
 Импортируйте нужные функции:
 
-from src.masks import mask_account_card, get_date, get_mask_card_number, get_mask_account from src.generators filter_by_currency,
-transaciton_descriptions, card_number_generator from src.processing filter_by_state, sort_by_date from src.decorators log
+from src.masks import mask_account_card, get_date, get_mask_card_number, get_mask_account
+from src.generators filter_by_currency,
+transaciton_descriptions, card_number_generator 
+from src.processing filter_by_state, sort_by_date
 from src.read_csv_excel load_transactions_from_csv, load_transactions_from_excel
 
 Тестирование Проект включает набор тестов с использованием pytest. Тесты проверяют:
