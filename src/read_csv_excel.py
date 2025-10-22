@@ -20,6 +20,7 @@ def load_transactions_from_csv(file_path: str) -> List[Dict[str, Any]]:
         return []
 
 
+
 def load_transactions_from_excel(file_path: str) -> List[Dict[str, Any]]:
     """Загружает список из файла в формате Excel и выдает список словарей с транзакциями"""
 
