@@ -196,3 +196,6 @@ def main() -> None:
             if count > 0:
                 print(f" {category}: {count} операций")
 
+
+
+
