@@ -65,3 +65,5 @@ def get_date(get_data: str) -> str:
 
 if __name__ == "__main__":
     print(get_date("2023-05-21T06:12:34-05:00"))
+
+

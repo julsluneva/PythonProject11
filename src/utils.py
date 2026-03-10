@@ -59,7 +59,7 @@ def read_operations_json() -> List[Dict[Any, Any]]:
         return []
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     file_path = os.path.join("..", "data", "operations.json")
     print(f"Ожидаемый путь: {os.path.abspath(file_path)}")
     print(f"Файл существует: {os.path.exists(file_path)}")
@@ -78,3 +78,5 @@ if __name__ == "__main__":
             print("Лог-файл создан, записи:", logs.count("\n") + 1)
     else:
         print("Лог-файл не создан")
+
+
