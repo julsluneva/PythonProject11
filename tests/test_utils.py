@@ -1,10 +1,10 @@
 import json
 import logging
-from unittest.mock import mock_open, patch, MagicMock
-import pytest
-import runpy
+from unittest.mock import MagicMock, mock_open, patch
 
-from src.utils import read_operations_json, logger
+import pytest
+
+from src.utils import logger, read_operations_json
 
 
 def test_logger_configuration():
@@ -24,6 +24,7 @@ def test_logger_configuration():
 def test_log_file_path():
     """Тест: проверка пути к файлу логов"""
     from src.utils import log_file_path
+
     assert "logs" in str(log_file_path)
     assert "utils.log" in str(log_file_path)
 
@@ -207,15 +208,7 @@ def test_large_json_file():
 
 def test_json_with_nested_structures():
     """Тест: JSON с вложенными структурами"""
-    test_data = [
-        {
-            "id": 1,
-            "operation": {
-                "amount": 100,
-                "currency": {"name": "RUB", "code": "RUB"}
-            }
-        }
-    ]
+    test_data = [{"id": 1, "operation": {"amount": 100, "currency": {"name": "RUB", "code": "RUB"}}}]
     with (
         patch("os.path.isfile", return_value=True),
         patch("builtins.open", mock_open()),
@@ -231,7 +224,7 @@ def test_json_with_special_characters():
     test_data = [
         {"description": "Перевод\nс новой строки"},
         {"description": "Табуляция\tтест"},
-        {"description": "Кавычки \"внутри\" строки"}
+        {"description": 'Кавычки "внутри" строки'},
     ]
     with (
         patch("os.path.isfile", return_value=True),
@@ -354,7 +347,7 @@ def test_absolute_path_construction():
     """Тест: проверка построения абсолютного пути"""
     with patch("os.path.isfile") as mock_isfile:
         mock_isfile.return_value = False
-        with patch("src.utils.logger") as mock_logger:
+        with patch("src.utils.logger") as _:
             result = read_operations_json()
             assert result == []
             # Проверяем что isfile был вызван с правильным путем

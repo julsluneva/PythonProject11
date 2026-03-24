@@ -1,9 +1,9 @@
-
-from typing import Any
 import logging
-from unittest.mock import patch, MagicMock
-import pytest
 import runpy
+from typing import Any
+from unittest.mock import patch
+
+import pytest
 
 from src.masks import get_mask_account, get_mask_card_number, logger
 
@@ -219,6 +219,7 @@ def test_main_block_simple():
     """Простой тест для импорта модуля"""
     # Просто импортируем модуль - этого достаточно для покрытия
     import src.masks
+
     assert src.masks is not None
 
 
@@ -275,7 +276,7 @@ def test_logger_handlers():
     """Тест: проверка наличия обработчиков логгера"""
     assert len(logger.handlers) > 0
     assert any(isinstance(h, logging.FileHandler) for h in logger.handlers)
-    assert all(hasattr(h, 'formatter') for h in logger.handlers)
+    assert all(hasattr(h, "formatter") for h in logger.handlers)
 
 
 def test_logger_formatter():
@@ -315,6 +316,7 @@ def test_logger_functionality():
     """Тест: функциональность логгера"""
     # Просто проверяем что логгер существует и имеет обработчики
     from src.masks import logger
+
     assert logger is not None
     assert len(logger.handlers) > 0
 
@@ -325,6 +327,7 @@ def test_logger_functionality():
         logger.warning("Test warning message")
     except Exception as e:
         pytest.fail(f"Логгер не работает: {e}")
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

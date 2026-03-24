@@ -1,26 +1,24 @@
 """Тесты для модуля display.py"""
 
-import pytest
-from unittest.mock import patch, MagicMock
-from datetime import datetime
+from unittest.mock import patch
 
-from src.display import (
-    format_date,
-    mask_card_or_account,
-    format_transaction,
-    display_transactions
-)
+import pytest
+
+from src.display import display_transactions, format_date, format_transaction, mask_card_or_account
 
 
 # Тесты для format_date
-@pytest.mark.parametrize("input_date, expected", [
-    ("2023-12-25T15:30:45Z", "25.12.2023"),
-    ("2023-12-25T15:30:45.123456", "25.12.2023"),
-    ("2023-12-25", "25.12.2023"),
-    ("", "Дата не указана"),
-    ("invalid-date", "invalid-da"),  # Функция обрезает до 10 символов
-    (None, "Дата не указана"),
-])
+@pytest.mark.parametrize(
+    "input_date, expected",
+    [
+        ("2023-12-25T15:30:45Z", "25.12.2023"),
+        ("2023-12-25T15:30:45.123456", "25.12.2023"),
+        ("2023-12-25", "25.12.2023"),
+        ("", "Дата не указана"),
+        ("invalid-date", "invalid-da"),  # Функция обрезает до 10 символов
+        (None, "Дата не указана"),
+    ],
+)
 def test_format_date(input_date, expected):
     """Тестирование форматирования даты"""
     if input_date is None:
@@ -42,25 +40,26 @@ def test_format_date_edge_cases():
 
 
 # Тесты для mask_card_or_account
-@pytest.mark.parametrize("input_number, expected", [
-    # Тесты для счетов
-    ("Счет 12345678901234567890", "Счет **7890"),
-    ("счет 40817810099910004321", "счет **4321"),
-    ("Счет 12345", "Счет 12345"),  # Слишком короткий номер
-
-    # Тесты для карт
-    ("Visa Platinum 1234567812345678", "Visa Platinum 1234 56** **** 5678"),
-    ("MasterCard 1234567812345678", "MasterCard 1234 56** **** 5678"),
-    ("Maestro 1234567812345678", "Maestro 1234 56** **** 5678"),
-    ("Visa 1234567812345678", "Visa 1234 56** **** 5678"),
-    ("1234567812345678", "1234 56** **** 5678"),  # Только номер
-
-    # Пустые и граничные случаи
-    ("", ""),
-    (None, ""),
-    ("Счет", "Счет"),  # Только слово без номера
-    ("Visa", "Visa"),  # Только название без номера
-])
+@pytest.mark.parametrize(
+    "input_number, expected",
+    [
+        # Тесты для счетов
+        ("Счет 12345678901234567890", "Счет **7890"),
+        ("счет 40817810099910004321", "счет **4321"),
+        ("Счет 12345", "Счет 12345"),  # Слишком короткий номер
+        # Тесты для карт
+        ("Visa Platinum 1234567812345678", "Visa Platinum 1234 56** **** 5678"),
+        ("MasterCard 1234567812345678", "MasterCard 1234 56** **** 5678"),
+        ("Maestro 1234567812345678", "Maestro 1234 56** **** 5678"),
+        ("Visa 1234567812345678", "Visa 1234 56** **** 5678"),
+        ("1234567812345678", "1234 56** **** 5678"),  # Только номер
+        # Пустые и граничные случаи
+        ("", ""),
+        (None, ""),
+        ("Счет", "Счет"),  # Только слово без номера
+        ("Visa", "Visa"),  # Только название без номера
+    ],
+)
 def test_mask_card_or_account(input_number, expected):
     """Тестирование маскирования карт и счетов"""
     if input_number is None:
@@ -95,16 +94,10 @@ def sample_transaction_json():
         "id": 441945886,
         "state": "EXECUTED",
         "date": "2019-08-26T10:50:58.294041",
-        "operationAmount": {
-            "amount": "31957.58",
-            "currency": {
-                "name": "руб.",
-                "code": "RUB"
-            }
-        },
+        "operationAmount": {"amount": "31957.58", "currency": {"name": "руб.", "code": "RUB"}},
         "description": "Перевод организации",
         "from": "Maestro 1596837868705199",
-        "to": "Счет 64686473678894779589"
+        "to": "Счет 64686473678894779589",
     }
 
 
@@ -120,13 +113,13 @@ def sample_transaction_csv():
         "currency_code": "PEN",
         "from": "Счет 58803664561298323391",
         "to": "Счет 39745660563456619397",
-        "description": "Перевод организации"
+        "description": "Перевод организации",
     }
 
 
-@patch('src.processing.normalize_transaction_structure')
-@patch('src.display.format_date')
-@patch('src.display.mask_card_or_account')
+@patch("src.processing.normalize_transaction_structure")
+@patch("src.display.format_date")
+@patch("src.display.mask_card_or_account")
 def test_format_transaction_json(mock_mask, mock_format_date, mock_normalize, sample_transaction_json):
     """Тестирование форматирования JSON транзакции"""
     # Настройка моков
@@ -142,10 +135,7 @@ def test_format_transaction_json(mock_mask, mock_format_date, mock_normalize, sa
 
     mock_mask.side_effect = mask_side_effect
 
-    mock_normalize.return_value = {
-        "amount": "31957.58",
-        "currency_name": "руб."
-    }
+    mock_normalize.return_value = {"amount": "31957.58", "currency_name": "руб."}
 
     result = format_transaction(sample_transaction_json)
 
@@ -159,14 +149,14 @@ def test_format_transaction_json(mock_mask, mock_format_date, mock_normalize, sa
         "26.08.2019 Перевод организации",
         "Maestro 1596 83** **** 5199 -> Счет **9589",
         "Сумма: 31957.58 руб.",
-        ""
+        "",
     ]
     assert result == "\n".join(expected_lines)
 
 
-@patch('src.processing.normalize_transaction_structure')
-@patch('src.display.format_date')
-@patch('src.display.mask_card_or_account')
+@patch("src.processing.normalize_transaction_structure")
+@patch("src.display.format_date")
+@patch("src.display.mask_card_or_account")
 def test_format_transaction_csv(mock_mask, mock_format_date, mock_normalize, sample_transaction_csv):
     """Тестирование форматирования CSV транзакции"""
     # Настройка моков
@@ -182,31 +172,23 @@ def test_format_transaction_csv(mock_mask, mock_format_date, mock_normalize, sam
 
     mock_mask.side_effect = mask_side_effect
 
-    mock_normalize.return_value = {
-        "amount": "16210",
-        "currency_name": "Sol"
-    }
+    mock_normalize.return_value = {"amount": "16210", "currency_name": "Sol"}
 
     result = format_transaction(sample_transaction_csv)
 
     # Проверяем результат
-    expected_lines = [
-        "05.09.2023 Перевод организации",
-        "Счет **3391 -> Счет **9397",
-        "Сумма: 16210 Sol",
-        ""
-    ]
+    expected_lines = ["05.09.2023 Перевод организации", "Счет **3391 -> Счет **9397", "Сумма: 16210 Sol", ""]
     assert result == "\n".join(expected_lines)
 
 
-@patch('src.processing.normalize_transaction_structure')
-@patch('src.display.format_date')
-@patch('src.display.mask_card_or_account')
+@patch("src.processing.normalize_transaction_structure")
+@patch("src.display.format_date")
+@patch("src.display.mask_card_or_account")
 def test_format_transaction_missing_fields(mock_mask, mock_format_date, mock_normalize):
     """Тестирование форматирования транзакции с отсутствующими полями"""
     transaction = {
         "date": "2023-01-01",
-        "description": "Тестовая операция"
+        "description": "Тестовая операция",
         # Нет from, to, operationAmount
     }
 
@@ -215,31 +197,23 @@ def test_format_transaction_missing_fields(mock_mask, mock_format_date, mock_nor
     # Оба вызова mask_card_or_account вернут пустые строки
     mock_mask.side_effect = ["", ""]
 
-    mock_normalize.return_value = {
-        "amount": "",
-        "currency_name": ""
-    }
+    mock_normalize.return_value = {"amount": "", "currency_name": ""}
 
     result = format_transaction(transaction)
 
-    expected_lines = [
-        "01.01.2023 Тестовая операция",
-        "",  # Пустая строка вместо from/to
-        "Сумма:  ",
-        ""
-    ]
+    expected_lines = ["01.01.2023 Тестовая операция", "", "Сумма:  ", ""]  # Пустая строка вместо from/to
     assert result == "\n".join(expected_lines)
 
 
-@patch('src.processing.normalize_transaction_structure')
-@patch('src.display.format_date')
-@patch('src.display.mask_card_or_account')
+@patch("src.processing.normalize_transaction_structure")
+@patch("src.display.format_date")
+@patch("src.display.mask_card_or_account")
 def test_format_transaction_only_from(mock_mask, mock_format_date, mock_normalize):
     """Тестирование транзакции только с полем from"""
     transaction = {
         "date": "2023-01-01",
         "description": "Снятие наличных",
-        "from": "Visa 1234567812345678"
+        "from": "Visa 1234567812345678",
         # to отсутствует
     }
 
@@ -249,31 +223,23 @@ def test_format_transaction_only_from(mock_mask, mock_format_date, mock_normaliz
     # Второй вызов (to) вернет пустую строку
     mock_mask.side_effect = ["Visa 1234 56** **** 5678", ""]
 
-    mock_normalize.return_value = {
-        "amount": "5000",
-        "currency_name": "RUB"
-    }
+    mock_normalize.return_value = {"amount": "5000", "currency_name": "RUB"}
 
     result = format_transaction(transaction)
 
-    expected_lines = [
-        "01.01.2023 Снятие наличных",
-        "Visa 1234 56** **** 5678",
-        "Сумма: 5000 RUB",
-        ""
-    ]
+    expected_lines = ["01.01.2023 Снятие наличных", "Visa 1234 56** **** 5678", "Сумма: 5000 RUB", ""]
     assert result == "\n".join(expected_lines)
 
 
-@patch('src.processing.normalize_transaction_structure')
-@patch('src.display.format_date')
-@patch('src.display.mask_card_or_account')
+@patch("src.processing.normalize_transaction_structure")
+@patch("src.display.format_date")
+@patch("src.display.mask_card_or_account")
 def test_format_transaction_only_to(mock_mask, mock_format_date, mock_normalize):
     """Тестирование транзакции только с полем to (например, пополнение)"""
     transaction = {
         "date": "2023-01-01",
         "description": "Пополнение счета",
-        "to": "Счет 12345678901234567890"
+        "to": "Счет 12345678901234567890",
         # from отсутствует
     }
 
@@ -283,46 +249,30 @@ def test_format_transaction_only_to(mock_mask, mock_format_date, mock_normalize)
     # Второй вызов (to) вернет маскированный счет
     mock_mask.side_effect = ["", "Счет **7890"]
 
-    mock_normalize.return_value = {
-        "amount": "10000",
-        "currency_name": "RUB"
-    }
+    mock_normalize.return_value = {"amount": "10000", "currency_name": "RUB"}
 
     result = format_transaction(transaction)
 
-    expected_lines = [
-        "01.01.2023 Пополнение счета",
-        "Счет **7890",
-        "Сумма: 10000 RUB",
-        ""
-    ]
+    expected_lines = ["01.01.2023 Пополнение счета", "Счет **7890", "Сумма: 10000 RUB", ""]
     assert result == "\n".join(expected_lines)
 
 
 # Тесты для display_transactions
-@patch('builtins.print')
+@patch("builtins.print")
 def test_display_transactions_empty(mock_print):
     """Тестирование вывода пустого списка транзакций"""
     display_transactions([])
 
-    mock_print.assert_called_once_with(
-        "Не найдено ни одной транзакции, подходящей под ваши условия фильтрации"
-    )
+    mock_print.assert_called_once_with("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
 
 
-@patch('builtins.print')
-@patch('src.display.format_transaction')
+@patch("builtins.print")
+@patch("src.display.format_transaction")
 def test_display_transactions_with_data(mock_format, mock_print):
     """Тестирование вывода списка транзакций"""
-    transactions = [
-        {"id": 1, "description": "Операция 1"},
-        {"id": 2, "description": "Операция 2"}
-    ]
+    transactions = [{"id": 1, "description": "Операция 1"}, {"id": 2, "description": "Операция 2"}]
 
-    mock_format.side_effect = [
-        "Форматированная транзакция 1",
-        "Форматированная транзакция 2"
-    ]
+    mock_format.side_effect = ["Форматированная транзакция 1", "Форматированная транзакция 2"]
 
     display_transactions(transactions)
 
@@ -341,8 +291,8 @@ def test_display_transactions_with_data(mock_format, mock_print):
     assert mock_format.call_count == 2
 
 
-@patch('builtins.print')
-@patch('src.display.format_transaction')
+@patch("builtins.print")
+@patch("src.display.format_transaction")
 def test_display_transactions_single(mock_format, mock_print):
     """Тестирование вывода одной транзакции"""
     transactions = [{"id": 1, "description": "Операция 1"}]
@@ -369,16 +319,14 @@ def test_display_transactions_integration():
             "description": "Перевод организации",
             "from": "Visa Platinum 1234567812345678",
             "to": "Счет 40817810099910004321",
-            "operationAmount": {
-                "amount": "15000.50",
-                "currency": {"name": "руб.", "code": "RUB"}
-            }
+            "operationAmount": {"amount": "15000.50", "currency": {"name": "руб.", "code": "RUB"}},
         }
     ]
 
     # Перехватываем вывод в консоль
-    from io import StringIO
     import sys
+    from io import StringIO
+
     captured_output = StringIO()
     sys.stdout = captured_output
 
@@ -391,10 +339,10 @@ def test_display_transactions_integration():
         assert "Всего банковских операций в выборке: 1" in output
 
         # Проверяем наличие даты в любом формате
-        assert any(date_format in output for date_format in [
-            "2023-12-25",  # Исходный формат
-            "25.12.2023"  # Отформатированный
-        ])
+        assert any(
+            date_format in output
+            for date_format in ["2023-12-25", "25.12.2023"]  # Исходный формат  # Отформатированный
+        )
 
         assert "Перевод организации" in output
         assert "Visa Platinum 1234 56** **** 5678" in output

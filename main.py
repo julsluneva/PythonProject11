@@ -197,5 +197,5 @@ def main() -> None:
                 print(f" {category}: {count} операций")
 
 
-
-
+if __name__ == "__main__":
+    main()

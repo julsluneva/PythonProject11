@@ -78,5 +78,3 @@ if __name__ == "__main__":  # pragma: no cover
             print("Лог-файл создан, записи:", logs.count("\n") + 1)
     else:
         print("Лог-файл не создан")
-
-

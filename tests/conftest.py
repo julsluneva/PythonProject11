@@ -12,18 +12,15 @@
 
 """Конфигурация для тестов pytest"""
 
-import pytest
-import sys
 import os
-from unittest.mock import patch
+import sys
 import warnings
+from unittest.mock import patch
+
+import pytest
 
 # Подавляем предупреждение о sys.modules
-warnings.filterwarnings(
-    "ignore",
-    message=".*found in sys.modules after import.*",
-    category=RuntimeWarning
-)
+warnings.filterwarnings("ignore", message=".*found in sys.modules after import.*", category=RuntimeWarning)
 
 
 # Добавляем корень проекта в sys.path для импортов
@@ -44,14 +41,14 @@ def clear_cache():
 @pytest.fixture
 def mock_input():
     """Фикстура для мока input"""
-    with patch('main.input') as mock:
+    with patch("main.input") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_print():
     """Фикстура для мока print"""
-    with patch('main.print') as mock:
+    with patch("main.print") as mock:
         yield mock
 
 
@@ -66,10 +63,7 @@ def mock_transactions():
             "description": "Перевод организации",
             "from": "Счет 12345678901234567890",
             "to": "Счет 98765432109876543210",
-            "operationAmount": {
-                "amount": "100.50",
-                "currency": {"name": "руб.", "code": "RUB"}
-            }
+            "operationAmount": {"amount": "100.50", "currency": {"name": "руб.", "code": "RUB"}},
         },
         {
             "id": 2,
@@ -77,10 +71,7 @@ def mock_transactions():
             "date": "2023-01-02T11:00:00",
             "description": "Открытие вклада",
             "to": "Счет 55555555555555555555",
-            "operationAmount": {
-                "amount": "200.75",
-                "currency": {"name": "USD", "code": "USD"}
-            }
+            "operationAmount": {"amount": "200.75", "currency": {"name": "USD", "code": "USD"}},
         },
         {
             "id": 3,
@@ -89,10 +80,7 @@ def mock_transactions():
             "description": "Перевод с карты на карту",
             "from": "Visa 1234567890123456",
             "to": "Mastercard 9876543210987654",
-            "operationAmount": {
-                "amount": "300.25",
-                "currency": {"name": "EUR", "code": "EUR"}
-            }
+            "operationAmount": {"amount": "300.25", "currency": {"name": "EUR", "code": "EUR"}},
         },
         {
             "id": 4,
@@ -101,11 +89,8 @@ def mock_transactions():
             "description": "Перевод организации",
             "from": "Счет 11111111111111111111",
             "to": "Счет 22222222222222222222",
-            "operationAmount": {
-                "amount": "400.00",
-                "currency": {"name": "руб.", "code": "RUB"}
-            }
-        }
+            "operationAmount": {"amount": "400.00", "currency": {"name": "руб.", "code": "RUB"}},
+        },
     ]
 
 
@@ -122,7 +107,7 @@ def mock_csv_transactions():
             "currency_code": "RUB",
             "from": "Счет 12345678901234567890",
             "to": "Счет 98765432109876543210",
-            "description": "Перевод организации"
+            "description": "Перевод организации",
         },
         {
             "id": 2,
@@ -132,6 +117,6 @@ def mock_csv_transactions():
             "currency_name": "USD",
             "currency_code": "USD",
             "to": "Счет 55555555555555555555",
-            "description": "Открытие вклада"
-        }
+            "description": "Открытие вклада",
+        },
     ]

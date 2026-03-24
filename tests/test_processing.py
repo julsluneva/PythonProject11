@@ -1,8 +1,7 @@
-
 import pytest
 
-from src.processing import (filter_by_state, sort_by_date, filter_by_currency, normalize_transaction_structure,
-process_bank_search, process_bank_operations)
+from src.processing import (filter_by_currency, filter_by_state, normalize_transaction_structure,
+                            process_bank_operations, process_bank_search, sort_by_date)
 
 bank_oper = [
     {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -63,48 +62,36 @@ def test_sort_by_date_invalid(operations, reverse):
 
 def test_filter_by_currency():
     """Тест фильтрации по валюте."""
-    #JSON формат
+    # JSON формат
     json_data = [
-        {
-            "id": 1,
-            "operationAmount": {
-                "amount": "100",
-                "currency": {"name": "руб.", "code": "RUB"}
-            }
-        },
-        {
-            "id": 2,
-            "operationAmount": {
-                "amount": "50",
-                "currency": {"name": "USD", "code": "USD"}
-            }
-        }
+        {"id": 1, "operationAmount": {"amount": "100", "currency": {"name": "руб.", "code": "RUB"}}},
+        {"id": 2, "operationAmount": {"amount": "50", "currency": {"name": "USD", "code": "USD"}}},
     ]
-    #CSV формат
+    # CSV формат
     csv_data = [
         {"id": 3, "amount": "200", "currency_name": "руб.", "currency_code": "RUB"},
-        {"id": 4, "amount": "75", "currency_name": "EUR", "currency_code": "EUR" }
+        {"id": 4, "amount": "75", "currency_name": "EUR", "currency_code": "EUR"},
     ]
 
-    #Тест 1: Фильтрация рублевых транзакций (JSON)
+    # Тест 1: Фильтрация рублевых транзакций (JSON)
     result = filter_by_currency(json_data, rub_only=True)
     assert len(result) == 1
     assert result[0]["id"] == 1
 
-    #Тест 2: Фильтрация рублевых транзакций (CSV)
+    # Тест 2: Фильтрация рублевых транзакций (CSV)
     result = filter_by_currency(csv_data, rub_only=True)
     assert len(result) == 1
     assert result[0]["id"] == 3
 
-    #Тест 3: Без фильтрации (все транзакции)
+    # Тест 3: Без фильтрации (все транзакции)
     result = filter_by_currency(json_data + csv_data, rub_only=False)
     assert len(result) == 4
 
-    #Тест 4: Пустые данные
+    # Тест 4: Пустые данные
     result = filter_by_currency([], rub_only=True)
     assert len(result) == 0
 
-    #Тест 5: Данные без информации о валюте
+    # Тест 5: Данные без информации о валюте
     data_no_currency = [{"id": 5, "description": "Операция"}]
     result = filter_by_currency(data_no_currency, rub_only=True)
     assert len(result) == 0
@@ -113,21 +100,10 @@ def test_filter_by_currency():
 def test_normalize_transaction_structure():
     """Тест нормализации структуры транзакции."""
     # JSON транзакция
-    json_tx = {
-        "id": 1,
-        "operationAmount": {
-            "amount": "100.50",
-            "currency": {"name": "руб.", "code": "RUB"}
-        }
-    }
+    json_tx = {"id": 1, "operationAmount": {"amount": "100.50", "currency": {"name": "руб.", "code": "RUB"}}}
 
     # CSV транзакция
-    csv_tx = {
-        "id": 2,
-        "amount": "200.75",
-        "currency_name": "USD",
-        "currency_code": "USD"
-    }
+    csv_tx = {"id": 2, "amount": "200.75", "currency_name": "USD", "currency_code": "USD"}
 
     # Тест 1: Нормализация JSON
     result = normalize_transaction_structure(json_tx)  # ИСПРАВЛЕНО
@@ -151,10 +127,7 @@ def test_normalize_transaction_structure():
     assert result["currency_code"] == ""
 
     # Тест 4: Транзакция с неправильной структурой
-    tx_wrong_structure = {
-        "id": 4,
-        "operationAmount": "просто строка"  # Не словарь
-    }
+    tx_wrong_structure = {"id": 4, "operationAmount": "просто строка"}  # Не словарь
     result = normalize_transaction_structure(tx_wrong_structure)  # ИСПРАВЛЕНО
     assert isinstance(result, dict)
 
@@ -249,8 +222,7 @@ def test_process_bank_search_with_regex_special_chars():
         {"id": 2, "description": "Оплата 50%"},
         {"id": 3, "description": "test.*special[chars]"},
         {"id": 4, "description": "Перевод (срочный)"},
-        {"id": 5, "description": "Оплата + комиссия"}
-
+        {"id": 5, "description": "Оплата + комиссия"},
     ]
 
     # Тест с символами, которые имеют значение в RegEx
@@ -281,7 +253,7 @@ def test_filter_by_state_case_insensitive():
         {"id": 1, "state": "EXECUTED"},
         {"id": 2, "state": "executed"},
         {"id": 3, "state": "ExEcUtEd"},
-        {"id": 4, "state": "CANCELED"}
+        {"id": 4, "state": "CANCELED"},
     ]
 
     result = filter_by_state(test_data, "EXECUTED")
@@ -317,7 +289,7 @@ def test_filter_by_currency_various_formats():
         {"id": 5, "currency_name": "RUB"},
         {"id": 6, "currency_name": "USD"},
         {"id": 7, "operationAmount": {"currency": {"name": "руб."}}},
-        {"id": 8, "operationAmount": {"currency": {"code": "RUB"}}}
+        {"id": 8, "operationAmount": {"currency": {"code": "RUB"}}},
     ]
 
     result = filter_by_currency(test_data, rub_only=True)
@@ -331,7 +303,7 @@ def test_process_bank_operations_case_insensitive():
     test_data = [
         {"id": 1, "description": "ПЕРЕВОД ОРГАНИЗАЦИИ"},
         {"id": 2, "description": "открытие вклада"},
-        {"id": 3, "description": "Перевод с карты на карту"}
+        {"id": 3, "description": "Перевод с карты на карту"},
     ]
 
     categories = ["Перевод", "Открытие", "Вклад"]

@@ -15,13 +15,13 @@ def format_date(date_str: str) -> str:
 
     try:
         # Пробуем разные форматы дат
-        for fmt in ('%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%f', '%Y-%m-%d'):
+        for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%d"):
             try:
                 dt = datetime.strptime(date_str, fmt)
-                return dt.strftime('%d.%m.%Y')
+                return dt.strftime("%d.%m.%Y")
             except ValueError:
                 continue
-        return date_str[:10] # Берем первые 10 символов, если формат неизвестен
+        return date_str[:10]  # Берем первые 10 символов, если формат неизвестен
     except Exception:
         return date_str
 
@@ -35,7 +35,7 @@ def mask_card_or_account(number: str) -> str:
     number_str = str(number)
 
     # Проверяем, это карта или счет
-    if 'счет' in number_str.lower():
+    if "счет" in number_str.lower():
         # Это счет
         parts = number_str.split()
         if len(parts) > 1 and parts[-1].isdigit():
@@ -51,13 +51,14 @@ def mask_card_or_account(number: str) -> str:
         # Это карта
         # Ищем номер карты (последняя группа цифр)
         import re
-        numbers = re.findall(r'\d+', number_str)
+
+        numbers = re.findall(r"\d+", number_str)
         if numbers:
             last_number = numbers[-1]
             if len(last_number) == 16 and last_number.isdigit():
                 masked = get_mask_card_number(last_number)
                 # Сохраняем название карты
-                card_name = ' '.join(number_str.split()[:-1]) if ' ' in number_str else ''
+                card_name = " ".join(number_str.split()[:-1]) if " " in number_str else ""
                 return f"{card_name} {masked}" if card_name else masked
         return number_str
 
@@ -71,15 +72,15 @@ def format_transaction(transaction: Dict) -> str:
 
     normalized = normalize_transaction_structure(transaction)
 
-    date = format_date(transaction.get('date', ''))
-    description = transaction.get('description', 'Операция')
-    from_account = mask_card_or_account(transaction.get('from', ''))
-    to_account = mask_card_or_account(transaction.get('to', ''))
+    date = format_date(transaction.get("date", ""))
+    description = transaction.get("description", "Операция")
+    from_account = mask_card_or_account(transaction.get("from", ""))
+    to_account = mask_card_or_account(transaction.get("to", ""))
 
-    amount = normalized.get('amount', '0')
-    currency_name = normalized.get('currency_name', '')
+    amount = normalized.get("amount", "0")
+    currency_name = normalized.get("currency_name", "")
 
-    #Форматируем вывод
+    # Форматируем вывод
     lines = []
     lines.append(f"{date} {description}")
     if from_account and to_account:
@@ -90,7 +91,7 @@ def format_transaction(transaction: Dict) -> str:
         lines.append(f"{to_account}")
 
     lines.append(f"Сумма: {amount} {currency_name}")
-    lines.append("") # Пустая строка для разделения
+    lines.append("")  # Пустая строка для разделения
 
     return "\n".join(lines)
 
@@ -106,7 +107,4 @@ def display_transactions(transactions: List[Dict]) -> None:
 
     for transaction in transactions:
         print(format_transaction(transaction))
-        print("-" * 50) # Добавляем разделитель для лучшей читаемости
-
-
-
+        print("-" * 50)  # Добавляем разделитель для лучшей читаемости

@@ -1,14 +1,12 @@
-
 import os
 import sys
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
-import pandas as pd
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
 from src.read_csv_excel import load_transactions_from_csv, load_transactions_from_excel
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
 
 # Тесты для CSV
@@ -24,7 +22,7 @@ def test_load_transactions_from_csv_success(mock_read_csv):
         with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
-        mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+        mock_read_csv.assert_called_once_with(file_path, delimiter=";")
         mock_df.to_dict.assert_called_once_with("records")
         assert result == [{"id": 1, "amount": 100}, {"id": 2, "amount": 200}]
         mock_print.assert_called_once_with("Успешно загружено 2 транзакций из CSV")
@@ -39,7 +37,7 @@ def test_load_transactions_from_csv_file_not_found(mock_read_csv):
     with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
-        mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+        mock_read_csv.assert_called_once_with(file_path, delimiter=";")
         assert result == []
         mock_print.assert_called_once_with("Ошибка: Файл nonexistent.csv не найден")
 
@@ -53,7 +51,7 @@ def test_load_transactions_from_csv_general_error(mock_read_csv):
     with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
-    mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+    mock_read_csv.assert_called_once_with(file_path, delimiter=";")
     assert result == []
     mock_print.assert_called_once_with("Ошибка при чтении CSV файла: Some error")
 
@@ -70,7 +68,7 @@ def test_load_transactions_from_csv_empty_file(mock_read_csv):
         with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
-        mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+        mock_read_csv.assert_called_once_with(file_path, delimiter=";")
         mock_df.to_dict.assert_called_once_with("records")
         assert result == []
         mock_print.assert_called_once_with("Успешно загружено 0 транзакций из CSV")
@@ -88,7 +86,7 @@ def test_load_transactions_from_csv_single_transaction(mock_read_csv):
         with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
-        mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+        mock_read_csv.assert_called_once_with(file_path, delimiter=";")
         mock_df.to_dict.assert_called_once_with("records")
         assert result == [{"id": 1, "amount": 100}]
         mock_print.assert_called_once_with("Успешно загружено 1 транзакций из CSV")
@@ -110,7 +108,7 @@ def test_load_transactions_from_csv_specific_exception(mock_read_csv):
             result = load_transactions_from_csv(file_path)
 
         assert result == []
-        mock_read_csv.assert_called_with(file_path, delimiter=';')
+        mock_read_csv.assert_called_with(file_path, delimiter=";")
         mock_print.assert_called_once_with(f"Ошибка при чтении CSV файла: {expected_message}")
         mock_read_csv.reset_mock()
 
@@ -124,7 +122,7 @@ def test_load_transactions_from_csv_with_none_dataframe(mock_read_csv):
     with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
-    mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+    mock_read_csv.assert_called_once_with(file_path, delimiter=";")
     assert result == []
     mock_print.assert_called_once()
 
@@ -138,7 +136,7 @@ def test_transactions_from_csv_empty_string_file_path(mock_read_csv):
     with patch("builtins.print") as mock_print:
         result = load_transactions_from_csv(file_path)
 
-    mock_read_csv.assert_called_once_with(file_path, delimiter=';')
+    mock_read_csv.assert_called_once_with(file_path, delimiter=";")
     assert result == []
     mock_print.assert_called_once_with("Ошибка: Файл  не найден")
 
@@ -283,7 +281,7 @@ def test_load_transactions_from_csv_with_mixed_case_keys(mock_read_csv):
         mock_df = MockDataFrame.return_value
         mock_df.to_dict.return_value = [
             {"ID": 1, "AMOUNT": 100, "CURRENCY_NAME": "RUB"},
-            {"ID": 2, "AMOUNT": 200, "CURRENCY_NAME": "USD"}
+            {"ID": 2, "AMOUNT": 200, "CURRENCY_NAME": "USD"},
         ]
         mock_read_csv.return_value = mock_df
         file_path = "test.csv"
@@ -293,7 +291,7 @@ def test_load_transactions_from_csv_with_mixed_case_keys(mock_read_csv):
 
         assert result == [
             {"id": 1, "amount": 100, "currency_name": "RUB"},
-            {"id": 2, "amount": 200, "currency_name": "USD"}
+            {"id": 2, "amount": 200, "currency_name": "USD"},
         ]
         mock_print.assert_called_once_with("Успешно загружено 2 транзакций из CSV")
 
@@ -303,18 +301,14 @@ def test_load_transactions_from_csv_with_whitespace_in_keys(mock_read_csv):
     """Тест нормализации ключей с пробелами"""
     with patch("read_csv_excel.pd.DataFrame") as MockDataFrame:
         mock_df = MockDataFrame.return_value
-        mock_df.to_dict.return_value = [
-            {"  id  ": 1, "  amount  ": 100, "  currency_name  ": "RUB"}
-        ]
+        mock_df.to_dict.return_value = [{"  id  ": 1, "  amount  ": 100, "  currency_name  ": "RUB"}]
         mock_read_csv.return_value = mock_df
         file_path = "test.csv"
 
         with patch("builtins.print") as mock_print:
             result = load_transactions_from_csv(file_path)
 
-        assert result == [
-            {"id": 1, "amount": 100, "currency_name": "RUB"}
-        ]
+        assert result == [{"id": 1, "amount": 100, "currency_name": "RUB"}]
         mock_print.assert_called_once_with("Успешно загружено 1 транзакций из CSV")
 
 
@@ -323,18 +317,14 @@ def test_load_transactions_from_excel_with_mixed_case_keys(mock_read_excel):
     """Тест нормализации ключей с разным регистром для Excel"""
     with patch("read_csv_excel.pd.DataFrame") as MockDataFrame:
         mock_df = MockDataFrame.return_value
-        mock_df.to_dict.return_value = [
-            {"ID": 1, "AMOUNT": 150, "CURRENCY_NAME": "EUR"}
-        ]
+        mock_df.to_dict.return_value = [{"ID": 1, "AMOUNT": 150, "CURRENCY_NAME": "EUR"}]
         mock_read_excel.return_value = mock_df
         file_path = "test.xlsx"
 
         with patch("builtins.print") as mock_print:
             result = load_transactions_from_excel(file_path)
 
-        assert result == [
-            {"id": 1, "amount": 150, "currency_name": "EUR"}
-        ]
+        assert result == [{"id": 1, "amount": 150, "currency_name": "EUR"}]
         mock_print.assert_called_once_with("Успешно загружено 1 транзакций из Excel")
 
 

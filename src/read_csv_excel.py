@@ -1,4 +1,3 @@
-
 from typing import Any, Dict, List
 
 import pandas as pd
@@ -8,8 +7,8 @@ def load_transactions_from_csv(file_path: str) -> List[Dict[str, Any]]:
     """Загружает список  из файла в формате csv и выдает список словарей с транзакциями"""
 
     try:
-        df = pd.read_csv(file_path, delimiter=';') # Явно указываем разделитель
-        #print(f"Колонки в CSV файле: {list(df.columns)}") # Диагностика
+        df = pd.read_csv(file_path, delimiter=";")  # Явно указываем разделитель
+        # print(f"Колонки в CSV файле: {list(df.columns)}") # Диагностика
 
         # Преобразуем в список словарей
         transactions = df.to_dict("records")
@@ -35,17 +34,16 @@ def load_transactions_from_csv(file_path: str) -> List[Dict[str, Any]]:
         return []
 
 
-
 def load_transactions_from_excel(file_path: str) -> List[Dict[str, Any]]:
     """Загружает список из файла в формате Excel и выдает список словарей с транзакциями"""
 
     try:
         df = pd.read_excel(file_path)
-        #print(f"Колонки в Excel файле: {list(df.columns)}") # Диагностика
+        # print(f"Колонки в Excel файле: {list(df.columns)}") # Диагностика
 
         transactions = df.to_dict("records")
 
-        #Нормализуем ключи (приводим к нижнему регистру для единообразия)
+        # Нормализуем ключи (приводим к нижнему регистру для единообразия)
         normalized_transactions = []
         for trans in transactions:
             normalized = {}
@@ -80,4 +78,3 @@ def load_transactions_from_excel(file_path: str) -> List[Dict[str, Any]]:
 # if __name__ == "__main__":
 #     print("Excel транзакции:", len(transactions_excel))
 #     print("CSV транзакции:", len(transactions_csv))
-

@@ -1,7 +1,7 @@
 """Модуль для обработки банковских транзакций: фильтрация, сортировка и нормализация"""
 
 import re
-from typing import Dict, List, Optional, Any
+from typing import Dict, List
 
 
 def filter_by_state(bank_oper: list[dict], state: str = "EXECUTED") -> list[dict]:
@@ -41,23 +41,13 @@ def sort_by_date(bank_oper: list[dict], reverse: bool = True) -> list[dict]:
     return sorted(valid_operations, key=lambda x: x.get("date", ""), reverse=reverse)
 
 
-
 def filter_by_currency(bank_oper: List[Dict], rub_only: bool = True) -> List[Dict]:
     """Фильтрует транзакции по валюте.
     Args:
         bank_oper: Список транзакций
         rub_only: Если True - только рублевые, False - все
     Returns:
-        Отфильтрованный список транзакций """
-
-
-def filter_by_currency(bank_oper: List[Dict], rub_only: bool = True) -> List[Dict]:
-    """Фильтрует транзакции по валюте.
-    Args:
-        bank_oper: Список транзакций
-        rub_only: Если True - только рублевые, False - все
-    Returns:
-        Отфильтрованный список транзакций """
+        Отфильтрованный список транзакций"""
 
     if not bank_oper or not rub_only:
         return bank_oper
@@ -69,31 +59,31 @@ def filter_by_currency(bank_oper: List[Dict], rub_only: bool = True) -> List[Dic
         # Проверяем разные возможные структуры данных
 
         # Вариант 1: Прямые поля currency_name и currency_code (CSV/Excel формат)
-        currency_name = oper.get('currency_name', '')
-        currency_code = oper.get('currency_code', '')
+        currency_name = oper.get("currency_name", "")
+        currency_code = oper.get("currency_code", "")
 
         if currency_name and isinstance(currency_name, str):
-            if any(rub in currency_name.lower() for rub in ['руб', 'rub', 'ruble']):
+            if any(rub in currency_name.lower() for rub in ["руб", "rub", "ruble"]):
                 is_ruble = True
 
         if currency_code and isinstance(currency_code, str):
-            if any(rub in currency_code.lower() for rub in ['rub', 'rur']):
+            if any(rub in currency_code.lower() for rub in ["rub", "rur"]):
                 is_ruble = True
 
         # Вариант 2: Вложенная структура operationAmount (JSON формат)
-        amount_info = oper.get('operationAmount', {})
+        amount_info = oper.get("operationAmount", {})
         if isinstance(amount_info, dict):
-            currency = amount_info.get('currency', {})
+            currency = amount_info.get("currency", {})
             if isinstance(currency, dict):
-                curr_name = currency.get('name', '')
-                curr_code = currency.get('code', '')
+                curr_name = currency.get("name", "")
+                curr_code = currency.get("code", "")
 
                 if curr_name and isinstance(curr_name, str):
-                    if any(rub in curr_name.lower() for rub in ['руб', 'rub', 'ruble']):
+                    if any(rub in curr_name.lower() for rub in ["руб", "rub", "ruble"]):
                         is_ruble = True
 
                 if curr_code and isinstance(curr_code, str):
-                    if any(rub in curr_code.lower() for rub in ['rub', 'rur']):
+                    if any(rub in curr_code.lower() for rub in ["rub", "rur"]):
                         is_ruble = True
 
         if is_ruble:
@@ -109,24 +99,24 @@ def normalize_transaction_structure(transaction: Dict) -> Dict:
     normalized = transaction.copy()
 
     # Инициализируем поля по умолчанию, если их нет
-    if 'amount' not in normalized:
-        normalized['amount'] = ''
-    if 'currency_name' not in normalized:
-        normalized['currency_name'] = ''
-    if 'currency_code' not in normalized:
-        normalized['currency_code'] = ''
+    if "amount" not in normalized:
+        normalized["amount"] = ""
+    if "currency_name" not in normalized:
+        normalized["currency_name"] = ""
+    if "currency_code" not in normalized:
+        normalized["currency_code"] = ""
 
     # Нормализуем поля для разных форматов файлов
-    if 'operationAmount' in transaction:
+    if "operationAmount" in transaction:
         # для JSON формата
-        amount_info = transaction['operationAmount']
+        amount_info = transaction["operationAmount"]
         if isinstance(amount_info, dict):
-            normalized['amount'] = amount_info.get('amount', '')
-            currency_info = amount_info.get('currency', {})
+            normalized["amount"] = amount_info.get("amount", "")
+            currency_info = amount_info.get("currency", {})
             if isinstance(currency_info, dict):
-                normalized['currency_name'] = currency_info.get('name', '')
-                normalized['currency_code'] = currency_info.get('code', '')
-    elif 'amount' in transaction and 'currency_name' in transaction:
+                normalized["currency_name"] = currency_info.get("name", "")
+                normalized["currency_code"] = currency_info.get("code", "")
+    elif "amount" in transaction and "currency_name" in transaction:
         # для CSV формата - уже есть нужные поля, ничего не делаем
         pass
 
@@ -135,7 +125,7 @@ def normalize_transaction_structure(transaction: Dict) -> Dict:
 
 def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
     """Ищет транзакции, в описании которых содержится заданная строка.
-      Использует регулярные выражения для поиска без учета регистра."""
+    Использует регулярные выражения для поиска без учета регистра."""
 
     if not data or not search:
         return []
@@ -145,16 +135,16 @@ def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
     filtered_data = []
 
     for transaction in data:
-        description = transaction.get('description', '')
+        description = transaction.get("description", "")
         if description is not None and isinstance(description, str) and pattern.search(description):
             filtered_data.append(transaction)
         elif description is not None and not isinstance(description, str):
-            #Если описание не строка, пробуем преобразовать
+            # Если описание не строка, пробуем преобразовать
             try:
                 desc_str = str(description)
                 if pattern.search(desc_str):
                     filtered_data.append(transaction)
-            except:
+            except (TypeError, ValueError):
                 pass
 
     return filtered_data
@@ -171,7 +161,7 @@ def process_bank_operations(data: List[Dict], categories: List[str]) -> Dict[str
     result = {category: 0 for category in categories}
 
     for transaction in data:
-        description = transaction.get('description', '')
+        description = transaction.get("description", "")
         if description is not None:
             # Преобразуем в строку, если это не строка
             if not isinstance(description, str):
