@@ -51,3 +51,9 @@ exclude = '''
                      # в корне проекта
 )
 '''
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = ["-v", "--cov=src", "--cov-report=term-missing"]
+filterwarnings = ["ignore::RuntimeWarning"]

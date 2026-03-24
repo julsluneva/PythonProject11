@@ -21,7 +21,7 @@ file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(m
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
-print(f"Логи будут записываться в: {log_file_path.absolute()}")
+# print(f"Логи будут записываться в: {log_file_path.absolute()}")
 
 
 def get_mask_card_number(card_number: str | int) -> str:
